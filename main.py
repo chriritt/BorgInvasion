@@ -1,54 +1,55 @@
 import sys, time
-from locations import locations
+from dictionaries import locations
+from dictionaries import story
 
 
+
+
+# class that handles text decoration
 class text_decoration:
     PURPLE = '\033[95m'
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
     DARKCYAN = '\033[36m'
+    RED = '\033[91m'
     BOLD = '\033[1m'
     ITALICS = '\x1B[3m'
     END = '\033[0m'
 
-char_message =  "During a routine mission, the USS Enterprise-D unexpectedly encountered a formidable Borg cube. " \
-                "Despite valiant efforts, the Borg overwhelmed the ship's defenses, leaving most of the crew " \
-                "incapacitated. In the midst of the chaos, Worf fought courageously, engaging multiple Borg drones in " \
-                "intense combat. However, he was eventually struck down and rendered unconscious by a powerful blast " \
-                "from an assimilation tubule. Now, as Worf awakens on the bridge, he finds himself surrounded by the " \
-                "aftermath of the Borg assault, his crewmates lying motionless. Determined to assess the situation " \
-                "and protect the ship, Worf's warrior instincts kick in as he searches for any signs of the Borg " \
-                "presence and a possible way to regain control of the USS Enterprise-D..."
-
 def letter_printer(char_message):
     for char in char_message:
-        print(text_decoration.ITALICS + text_decoration.YELLOW + char, end='' + text_decoration.END)
+        print(text_decoration.ITALICS + text_decoration.BOLD + text_decoration.YELLOW + char, end='' + text_decoration.END)
         sys.stdout.flush()
         time.sleep(0.015)
 
-# welcome message
-print(text_decoration.BOLD + text_decoration.GREEN + 'Welcome to BORG INVASION: A Star Trek Text Adventure' + text_decoration.END)
-print('\033[0m' + 'Developed by Chris Ritter.\n')
-play_game = int(input('1. Play Game   2. Exit: '))
+def main_menu():
+    print(text_decoration.BOLD + text_decoration.GREEN + 'Welcome to BORG INVASION: A Star Trek Text Adventure' + text_decoration.END)
+    print(text_decoration.ITALICS + 'Developed by Chris Ritter.\n' + text_decoration.END)
+    play_game = int(input(text_decoration.BOLD + '1. Play Game   2. Exit: ' + text_decoration.END))
 
-# player selection starts game
-if play_game == 1:
-    game_instructions = "Reach Engineering to win the game. \nTo move, type a direction: ex. 'North' Type 'exit' to quit."
-    move_directions = ['north', 'north east', 'east', 'south east', 'south', 'south west', 'west', 'north west']
+    # player selection starts game
+    if play_game == 1:
+        print()     
+        print('Navigate through the Enterprise to get to Engineering. Collect important items along the way. Once in Engineering, defeat the Borg Drones to win the game.')
+        print()
+        print("To move, type a direction: ex. 'north'.\nObtain items by typing the word 'take' + the item name: ex. 'take tricorder'.\nType 'exit' to quit.")
+        print()
+        print(text_decoration.DARKCYAN + text_decoration.BOLD + 'Movement directions: north, south, east, west\n\n' + text_decoration.END)
+        
+        # prints opening story
+        message = story['backstory']
+        letter_printer(message)
+        print()
+        print()
+    else:
+        exit()
 
-    print()
-    print(game_instructions)
-    print('Move directions: north, north east, east, south east, south, south west, west, north west\n\n')
-    
-    # prints opening story
-    letter_printer(char_message)
-    print()
-    print()
-    
-    current_room = locations['bridge']
-    inventory = []
-else:
-    exit()
+# starting var values
+move_directions = ['north', 'east', 'south', 'west']               
+current_room = locations['bridge']
+inventory = []
+
+main_menu()
 
 # gameplay loop
 while True:
@@ -56,20 +57,29 @@ while True:
     print(text_decoration.BOLD + 'You are {}.'.format(current_room['name']).upper() + text_decoration.END)
     # show items in room
     if current_room['equipment']:
-      print(text_decoration.BOLD + 'Helpful items: {}'.format(', '.join(current_room['equipment'])) + text_decoration.END)
+        print(text_decoration.BOLD + 'Useful Items: {}'.format(', '.join(current_room['equipment'])) + text_decoration.END)
 
-    command = input('\nWhat are your orders? ')
-    print()
+    command = input(text_decoration.YELLOW + '\nWhat are your orders? ' + text_decoration.END)
 
     # player movement
     if command in move_directions:
         if command in current_room:
             current_room = locations[current_room[command]]
+            if current_room == locations['turbo lift 2']:
+                print(text_decoration.RED + text_decoration.BOLD +'This Turbo Lift only goes to Engineering, once there you will not be able to return.\nMake sure you have all of the necessary equipment.' + text_decoration.END)
             if current_room == locations['engineering']:
                 print()
-                print('You have made it to Engineering and defeated the Borg!')
+                message = story['ending']
+                letter_printer(message)
                 print()
-                print('Thank you for playing!')
+                print(text_decoration.GREEN + text_decoration.BOLD + 'You have made it to Engineering and defeated the Borg!'+ text_decoration.END)
+                print()
+                play_again = input(text_decoration.YELLOW + 'Would you like to play again? yes/no: ' + text_decoration.END)
+                if play_again == 'yes':
+                    print()
+                    main_menu()
+                else:
+                    print('Thank you for playing Borg Invasion!')
                 print()
                 exit()
         # invalid movement
