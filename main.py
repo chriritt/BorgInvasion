@@ -1,9 +1,10 @@
+# Chris Ritter IT-140
+
 import sys, time
 from dictionaries import locations
-from dictionaries import story
+from story import *
 
-
-
+# Classes and Functions -----------------------------
 
 # class that handles text decoration
 class text_decoration:
@@ -16,8 +17,8 @@ class text_decoration:
     ITALICS = '\x1B[3m'
     END = '\033[0m'
 
-def letter_printer(char_message):
-    for char in char_message:
+def letter_printer(message):
+    for char in message:
         print(text_decoration.ITALICS + text_decoration.BOLD + text_decoration.YELLOW + char, end='' + text_decoration.END)
         sys.stdout.flush()
         time.sleep(0.015)
@@ -30,19 +31,23 @@ def main_menu():
     # player selection starts game
     if play_game == 1:
         print()     
-        print('Navigate through the Enterprise to get to Engineering. Collect important items along the way. Once in Engineering, defeat the Borg Drones to win the game.')
+        print('Instructions:\nNavigate through the Enterprise to get to Engineering. Collect important items along the way. Once in Engineering, defeat the Borg Drones to win the game.')
         print()
-        print("To move, type a direction: ex. 'north'.\nObtain items by typing the word 'take' + the item name: ex. 'take tricorder'.\nType 'exit' to quit.")
+        print("Navigation:\nTo navigate through the ship, type a direction: ex." + text_decoration.BOLD + text_decoration.GREEN + "'north'" + text_decoration.END + "." + "\n\nGathering Items:\nObtain items by typing the word" + text_decoration.BOLD + text_decoration.GREEN + " 'take' " + text_decoration.END + "the item name: ex. 'take tricorder'.\n\nType" + text_decoration.BOLD + text_decoration.GREEN + " 'exit' " + text_decoration.END + "to quit.")
         print()
         print(text_decoration.DARKCYAN + text_decoration.BOLD + 'Movement directions: north, south, east, west\n\n' + text_decoration.END)
         
         # prints opening story
-        message = story['backstory']
+        message = backstory
         letter_printer(message)
         print()
+        print('---------------------------------------------')
         print()
+
     else:
         exit()
+        
+# -----------------------------------------------------
 
 # starting var values
 move_directions = ['north', 'east', 'south', 'west']               
@@ -53,39 +58,41 @@ main_menu()
 
 # gameplay loop
 while True:
-    # display player current location and items
+    # display player current location
     print(text_decoration.BOLD + 'You are {}.'.format(current_room['name']).upper() + text_decoration.END)
+    
     # show items in room
     if current_room['equipment']:
-        print(text_decoration.BOLD + 'Useful Items: {}'.format(', '.join(current_room['equipment'])) + text_decoration.END)
+        print(text_decoration.BOLD + 'Useful Items in this area: {}'.format(', '.join(current_room['equipment']).capitalize()) + text_decoration.END)
+    else:
+        print('There are no useful items in this area.')
 
-    command = input(text_decoration.YELLOW + '\nWhat are your orders? ' + text_decoration.END)
+    command = input(text_decoration.YELLOW + '\nWhat are your orders? ' + text_decoration.END).lower()
+    print()
+    print('---------------------------------------------')
+    print()
 
     # player movement
     if command in move_directions:
         if command in current_room:
             current_room = locations[current_room[command]]
-            if current_room == locations['turbo lift 2']:
+            if current_room == locations['turbo lift 2']: # warns player when they're about to enter engineering
                 print(text_decoration.RED + text_decoration.BOLD +'This Turbo Lift only goes to Engineering, once there you will not be able to return.\nMake sure you have all of the necessary equipment.' + text_decoration.END)
-            if current_room == locations['engineering']:
                 print()
-                message = story['ending']
+            if current_room == locations['engineering']:
+                message = ending
                 letter_printer(message)
+                print()
                 print()
                 print(text_decoration.GREEN + text_decoration.BOLD + 'You have made it to Engineering and defeated the Borg!'+ text_decoration.END)
                 print()
-                play_again = input(text_decoration.YELLOW + 'Would you like to play again? yes/no: ' + text_decoration.END)
-                if play_again == 'yes':
-                    print()
-                    main_menu()
-                else:
-                    print('Thank you for playing Borg Invasion!')
+                print('Thank you for playing Borg Invasion!')
                 print()
                 exit()
         # invalid movement
         else:
+            print(text_decoration.RED + text_decoration.BOLD + "YOU CANNOT GO THAT WAY!" + text_decoration.END)
             print()
-            print("You can't go that way.")
 
     # exit game
     elif command in ('exit'):
@@ -100,16 +107,13 @@ while True:
             current_room['equipment'].remove(item)
             inventory.append(item)
             print(text_decoration.DARKCYAN + text_decoration.BOLD + 'You have obtained {}.'.format(item) + text_decoration.END)
-            print(text_decoration.BOLD + text_decoration.PURPLE + 'Inventory: {}'.format(', '.join(inventory).capitalize()) + text_decoration.END)
+            print(text_decoration.BOLD + text_decoration.PURPLE + 'Inventory: {}'.format(', '.join(inventory).upper()) + text_decoration.END)
             print()
         else:
-            print('There is no {} here.'.format(item))
+            print(text_decoration.RED + text_decoration.BOLD + 'There is no {} here.'.format(item).upper() + text_decoration.END)
+            print()
 
     # invalid command
     else:
+        print(text_decoration.RED + text_decoration.BOLD + 'COMMAND NOT UNDERSTOOD! PLEASE RESTATE COMMAND.' + text_decoration.END)
         print()
-        print('I do not understand that command. Please try again.')
-
-# player selection kills program
-else:
-    exit()
