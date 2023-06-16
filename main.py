@@ -21,7 +21,7 @@ def letter_printer(message):
     for char in message:
         print(text_decoration.ITALICS + text_decoration.BOLD + text_decoration.YELLOW + char, end='' + text_decoration.END)
         sys.stdout.flush()
-        time.sleep(0.015)
+        time.sleep(0.010)
 
 def main_menu():
     print(text_decoration.BOLD + text_decoration.GREEN + 'Welcome to BORG INVASION: A Star Trek Text Adventure' + text_decoration.END)
@@ -63,9 +63,9 @@ while True:
     
     # show items in room
     if current_room['equipment']:
-        print(text_decoration.BOLD + 'Useful Items in this area: {}'.format(', '.join(current_room['equipment']).capitalize()) + text_decoration.END)
-    else:
-        print('There are no useful items in this area.')
+        print(text_decoration.BOLD + text_decoration.DARKCYAN + 'Available Items: {}'.format(', '.join(current_room['equipment']).capitalize()) + text_decoration.END)
+    # show current inventory
+    print(text_decoration.BOLD + text_decoration.PURPLE + 'Inventory: {}'.format(', '.join(inventory).upper()) + text_decoration.END)
 
     command = input(text_decoration.YELLOW + '\nWhat are your orders? ' + text_decoration.END).lower()
     print()
@@ -79,7 +79,9 @@ while True:
             if current_room == locations['turbo lift 2']: # warns player when they're about to enter engineering
                 print(text_decoration.RED + text_decoration.BOLD +'This Turbo Lift only goes to Engineering, once there you will not be able to return.\nMake sure you have all of the necessary equipment.' + text_decoration.END)
                 print()
+            #conditional for entering engineering
             if current_room == locations['engineering']:
+                # all items added to inventory
                 if len(inventory) == 6:
                     message = ending
                     letter_printer(message)
@@ -87,19 +89,20 @@ while True:
                     print()
                     print(text_decoration.GREEN + text_decoration.BOLD + 'You have made it to Engineering and defeated the Borg!'+ text_decoration.END)
                     print()
-                    print('Thank you for playing Borg Invasion!')
+                    print(text_decoration.BOLD + text_decoration.GREEN + 'Thank you for playing Borg Invasion!' + text_decoration.END)
                     print()
                     exit()
+                # less than 6 items added to inventory 
                 if len(inventory) != 6:
                     message = defeat
                     letter_printer(message)
                     print()
                     print()
-                    print(text_decoration.RED + text_decoration.BOLD + "You have made it to Engineering, but were assimilated by the Borg. You will never see the hallowed halls of Sto'Vo'Kor"+ text_decoration.END)
+                    print(text_decoration.RED + text_decoration.BOLD + "You have made it to Engineering, but were assimilated by the Borg. You will never see the hallowed halls of Sto'Vo'Kor."+ text_decoration.END)
                     print()
-                    print('You did not collect the necessary items to complete your mission.')
+                    print(text_decoration.RED + text_decoration.BOLD + 'You did not collect the necessary items to complete your mission.' + text_decoration.END)
                     print()
-                    print('Thank you for playing Borg Invasion!')
+                    print(text_decoration.BOLD + text_decoration.GREEN + 'Thank you for playing Borg Invasion!' + text_decoration.END)
                     print()
                     exit()
                     break                
@@ -121,7 +124,6 @@ while True:
             current_room['equipment'].remove(item)
             inventory.append(item)
             print(text_decoration.DARKCYAN + text_decoration.BOLD + 'You have obtained {}.'.format(item) + text_decoration.END)
-            print(text_decoration.BOLD + text_decoration.PURPLE + 'Inventory: {}'.format(', '.join(inventory).upper()) + text_decoration.END)
             print()
         else:
             print(text_decoration.RED + text_decoration.BOLD + 'There is no {} here.'.format(item).upper() + text_decoration.END)
