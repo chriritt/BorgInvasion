@@ -31,7 +31,7 @@ def main_menu():
     # player selection starts game
     if play_game == 1:
         print()     
-        print('Instructions:\nNavigate through the Enterprise to get to Engineering. Collect important items along the way. Once in Engineering, defeat the Borg Drones to win the game.')
+        print('Instructions:\nNavigate through the Enterprise to get to Engineering. Collect important items along the way. Once in Engineering, defeat the Borg Drones to win the game.\nFailing to collect all of the items will result in defeat!')
         print()
         print("Navigation:\nTo navigate through the ship, type a direction: ex." + text_decoration.BOLD + text_decoration.GREEN + "'north'" + text_decoration.END + "." + "\n\nGathering Items:\nObtain items by typing the word" + text_decoration.BOLD + text_decoration.GREEN + " 'take' " + text_decoration.END + "the item name: ex. 'take tricorder'.\n\nType" + text_decoration.BOLD + text_decoration.GREEN + " 'exit' " + text_decoration.END + "to quit.")
         print()
@@ -80,15 +80,29 @@ while True:
                 print(text_decoration.RED + text_decoration.BOLD +'This Turbo Lift only goes to Engineering, once there you will not be able to return.\nMake sure you have all of the necessary equipment.' + text_decoration.END)
                 print()
             if current_room == locations['engineering']:
-                message = ending
-                letter_printer(message)
-                print()
-                print()
-                print(text_decoration.GREEN + text_decoration.BOLD + 'You have made it to Engineering and defeated the Borg!'+ text_decoration.END)
-                print()
-                print('Thank you for playing Borg Invasion!')
-                print()
-                exit()
+                if len(inventory) == 6:
+                    message = ending
+                    letter_printer(message)
+                    print()
+                    print()
+                    print(text_decoration.GREEN + text_decoration.BOLD + 'You have made it to Engineering and defeated the Borg!'+ text_decoration.END)
+                    print()
+                    print('Thank you for playing Borg Invasion!')
+                    print()
+                    exit()
+                if len(inventory) != 6:
+                    message = defeat
+                    letter_printer(message)
+                    print()
+                    print()
+                    print(text_decoration.RED + text_decoration.BOLD + "You have made it to Engineering, but were assimilated by the Borg. You will never see the hallowed halls of Sto'Vo'Kor"+ text_decoration.END)
+                    print()
+                    print('You did not collect the necessary items to complete your mission.')
+                    print()
+                    print('Thank you for playing Borg Invasion!')
+                    print()
+                    exit()
+                    break                
         # invalid movement
         else:
             print(text_decoration.RED + text_decoration.BOLD + "YOU CANNOT GO THAT WAY!" + text_decoration.END)
