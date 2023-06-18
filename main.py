@@ -4,8 +4,6 @@ import sys, time
 from dictionaries import locations
 from story import *
 
-# Classes and Functions -----------------------------
-
 # class that handles text decoration
 class text_decoration:
     PURPLE = '\033[95m'
@@ -16,8 +14,25 @@ class text_decoration:
     BOLD = '\033[1m'
     ITALICS = '\x1B[3m'
     END = '\033[0m'
-
-def letter_printer(message):
+# game instructions function
+def game_instructions():
+        print()     
+        print('Instructions:\nYour mission is to navigate through the USS Enterprise-D and reach Engineering while collecting important items along the way. Defeat the Borg Drones in Engineering to win the game.\nBe warned, failing to collect all of the items will result in defeat!!')
+        print()
+        print("Navigation:\nTo move around the ship, type the direction you want to go. For example, if you want to go north, simply type " + text_decoration.BOLD + text_decoration.GREEN + "'north'" + text_decoration.END + ".")
+        print()
+        print('You can move in four primary directions: ' + text_decoration.GREEN + text_decoration.BOLD + 'north, south, east, west' + text_decoration.END)
+        print()
+        print("Gathering Items:\nCollect valuable items by using the" + text_decoration.GREEN + text_decoration.BOLD + " 'take'" + text_decoration.END + " command followed by the item name. For example, if you want to take a tricorder, type 'take tricorder'. Make sure to gather all the essential items to aid you in your mission.")
+        print()
+        print("Inventory Limit:\nYour inventory has a maximum capacity of 6 items. If you attempt to pick up an additional item when your inventory is already full, you must first drop an item before you can pick up a new one.\nTo drop an item, use the " + text_decoration.GREEN + text_decoration.BOLD+ "'drop'" + text_decoration.END + " command followed by the item name. For example, to drop a phaser, type 'drop phaser'.")
+        print()
+        print("Exiting the Game:\nIf you want to exit the game at any time, simply type " + text_decoration.GREEN + text_decoration.BOLD + "'exit'." + text_decoration.END)
+        print()
+        print(text_decoration.BOLD + text_decoration.GREEN + "Good luck on your mission to defeat the Borg and protect the USS Enterprise!" + text_decoration.END)
+        print()
+# function that prints story elements a character at a time
+def char_printer(message):
     for char in message:
         print(text_decoration.ITALICS + text_decoration.BOLD + text_decoration.YELLOW + char, end='' + text_decoration.END)
         sys.stdout.flush()
@@ -30,16 +45,11 @@ def main_menu():
 
     # player selection starts game
     if play_game == 1:
-        print()     
-        print('Instructions:\nNavigate through the Enterprise to get to Engineering. Collect important items along the way. Once in Engineering, defeat the Borg Drones to win the game.\nFailing to collect all of the items will result in defeat!')
-        print()
-        print("Navigation:\nTo navigate through the ship, type a direction: ex." + text_decoration.BOLD + text_decoration.GREEN + "'north'" + text_decoration.END + "." + "\n\nGathering Items:\nObtain items by typing the word" + text_decoration.BOLD + text_decoration.GREEN + " 'take' " + text_decoration.END + "the item name: ex. 'take tricorder'.\n\nType" + text_decoration.BOLD + text_decoration.GREEN + " 'exit' " + text_decoration.END + "to quit.")
-        print()
-        print(text_decoration.DARKCYAN + text_decoration.BOLD + 'Movement directions: north, south, east, west\n\n' + text_decoration.END)
+        game_instructions()
         
         # prints opening story
         message = backstory
-        letter_printer(message)
+        char_printer(message)
         print()
         print('---------------------------------------------')
         print()
@@ -84,7 +94,7 @@ while True:
                 # all items added to inventory
                 if len(inventory) == 6:
                     message = ending
-                    letter_printer(message)
+                    char_printer(message)
                     print()
                     print()
                     print(text_decoration.GREEN + text_decoration.BOLD + 'You have made it to Engineering and defeated the Borg!'+ text_decoration.END)
@@ -95,7 +105,7 @@ while True:
                 # less than 6 items added to inventory 
                 if len(inventory) != 6:
                     message = defeat
-                    letter_printer(message)
+                    char_printer(message)
                     print()
                     print()
                     print(text_decoration.RED + text_decoration.BOLD + "You have made it to Engineering, but were assimilated by the Borg. You will never see the hallowed halls of Sto'Vo'Kor."+ text_decoration.END)
