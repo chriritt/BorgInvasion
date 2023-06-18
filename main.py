@@ -121,13 +121,29 @@ while True:
     elif command.lower().split()[0] == 'take':
         item = command.lower().split()[1]
         if item in current_room['equipment']:
-            current_room['equipment'].remove(item)
-            inventory.append(item)
-            print(text_decoration.DARKCYAN + text_decoration.BOLD + 'You have obtained {}.'.format(item) + text_decoration.END)
-            print()
+            if len(inventory) == 6:
+                print(text_decoration.RED + text_decoration.BOLD + 'You have already gathered the maximum number of items. You must drop an item to pick up another.' + text_decoration.END)
+                print()
+            else:
+                current_room['equipment'].remove(item)
+                inventory.append(item)
+                print(text_decoration.DARKCYAN + text_decoration.BOLD + 'Obtained {}.'.format(item) + text_decoration.END)
+                print()
         else:
             print(text_decoration.RED + text_decoration.BOLD + 'There is no {} here.'.format(item).upper() + text_decoration.END)
             print()
+
+    # dropping items
+    elif command.lower().split()[0] == 'drop':
+        item = command.lower().split()[1]
+        if item in inventory:
+            current_room['equipment'].append(item)
+            inventory.remove(item)
+            print(text_decoration.DARKCYAN + text_decoration.BOLD + 'Dropped {}.'.format(item) + text_decoration.END)
+            print()
+        else:
+            print('You have not collected that item.')
+
 
     # invalid command
     else:

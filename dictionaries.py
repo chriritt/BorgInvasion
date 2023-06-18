@@ -23,7 +23,7 @@ locations = {
         'east': 'turbo lift',
         'south': 'observation lounge',
         'south east': 'turbo lift',
-        'equipment': ['phaser']},
+        'equipment': ['phaser', 'disruptor']},
 
     'sick bay': {
         'name': 'in sick bay',
@@ -41,7 +41,7 @@ locations = {
         'name': 'in your quarters',
         'east': 'science lab',
         'north': 'turbo lift 2',
-        'equipment': ['bat\'leth']},
+        'equipment': ['bat\'leth', 'mek\'leth']},
 
     'engineering': {
         'name': 'in engineering',
