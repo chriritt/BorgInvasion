@@ -121,17 +121,11 @@ while True:
             print(text_decoration.RED + text_decoration.BOLD + "YOU CANNOT GO THAT WAY!" + text_decoration.END)
             print()
 
-    # exit game
-    elif command in ('exit'):
-        print()
-        print('Thank you for playing Borg Invasion!')
-        break
-
     # gathering items
     elif command.lower().split()[0] == 'take':
         item = command.lower().split()[1]
         if item in current_room['equipment']:
-            if len(inventory) == 6:
+            if len(inventory) >= 6:
                 print(text_decoration.RED + text_decoration.BOLD + 'You have already gathered the maximum number of items. You must drop an item to pick up another.' + text_decoration.END)
                 print()
             else:
@@ -147,13 +141,16 @@ while True:
     elif command.lower().split()[0] == 'drop':
         item = command.lower().split()[1]
         if item in inventory:
-            current_room['equipment'].append(item)
-            inventory.remove(item)
-            print(text_decoration.DARKCYAN + text_decoration.BOLD + 'Dropped {}.'.format(item) + text_decoration.END)
-            print()
+            if item == 'phase-adapter':
+                print(text_decoration.RED + text_decoration.BOLD + 'The phase-adapter is a key item and cannot be dropped.' + text_decoration.END)
+                print()
+            else:
+                current_room['equipment'].append(item)
+                inventory.remove(item)
+                print(text_decoration.DARKCYAN + text_decoration.BOLD + 'Dropped {}.'.format(item) + text_decoration.END)
+                print()
         else:
             print('You have not collected that item.')
-
 
     # invalid command
     else:
